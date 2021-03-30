@@ -61,7 +61,7 @@ userController.updateUser = (req, res, next) => {
   User.updateOne(queryFilter, queryUpdate, (err, user) => {
     if (err) {
       res.redirect('/signup');
-      return next('Error in userController.createUser: ' + JSON.stringify(err));
+      return next('Error in userController.updateUser: ' + JSON.stringify(err));
     }
     if (user) {
       res.locals.user= user;
@@ -83,7 +83,7 @@ userController.closeUser = (req, res, next) => {
   User.updateOne(queryFilter, queryUpdate, (err, user) => {
     if (err) {
       res.redirect('/signup');
-      return next('Error in userController.createUser: ' + JSON.stringify(err));
+      return next('Error in userController.closeUser: ' + JSON.stringify(err));
     }
     if (user) {
       res.locals.user= user;
