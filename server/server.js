@@ -1,7 +1,8 @@
 const express = require('express');
 const app = express();
-const path = require('path');
 const mongoose = require('mongoose');
+
+const apiUsers = require('./routes/apiUsers');
 
 const PORT = 3000;
 
@@ -9,7 +10,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const mongoURI = 'mongodb+srv://codesmith:s0lOprojec7@cluster0.l6e2x.mongodb.net/air_community?retryWrites=true&w=majority';
-mongoose.connect(mongoURI);
+mongoose.connect(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true});
+
+//Routes
+app.use('/users', apiUsers);
 
 app.use('/', (req, res) => {
   res.status(200).send('Houston, the satellite is in orbit!');
