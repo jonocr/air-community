@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require('mongoose');
 
 const apiUsers = require('./routes/apiUsers');
+const apiItems = require('./routes/apiItems');
 
 const PORT = 3000;
 
@@ -14,6 +15,7 @@ mongoose.connect(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true});
 
 //Routes
 app.use('/users', apiUsers);
+app.use('/items', apiItems);
 
 app.use('/', (req, res) => {
   res.status(200).send('Houston, the satellite is in orbit!');
