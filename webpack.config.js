@@ -18,11 +18,12 @@ module.exports = (env) => {
       contentBase: path.join(__dirname, './'),
       compress: true,
       port: 8080,
-      // proxy: {
-      //   '/api/': {
-      //     target: 'http://localhost:3000/'
-      //   }
-      // },
+      hot: true,
+      proxy: {
+        '/items': {
+          target: 'http://localhost:3000/'
+        }
+      },
     },
     module: {
       rules: [
