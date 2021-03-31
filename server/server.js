@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const mongoURI = 'mongodb+srv://codesmith:s0lOprojec7@cluster0.l6e2x.mongodb.net/air_community?retryWrites=true&w=majority';
-mongoose.connect(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
 
 //Routes
 app.use('/users', apiUsers);
