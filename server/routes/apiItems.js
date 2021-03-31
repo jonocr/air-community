@@ -6,23 +6,26 @@ router.get('/', itemController.getAllItems, (req, res) => {
   res.status(200).json(res.locals.items);
 });
 
-router.get('/:email', itemController.getItemsByName, (req, res) => {
-  res.status(200).json(res.locals.item);
+router.get('/:name', itemController.getItemsByName, (req, res) => {
+  res.status(200).json(res.locals.items);
 });
 
 router.post('/create', itemController.createItem, (req, res) => {
   res.status(200).json(res.locals.itemId);
 });
 
-router.patch('/:email', itemController.updateItem, (req, res) => {
+router.patch('/:itemId', itemController.updateItem, (req, res) => {
   res.status(200).json(res.locals.item);
 });
 
-router.patch('/:email', itemController.rentItem, (req, res) => {
+router.patch('/rent/:itemId', itemController.rentItem, (req, res) => {
+  res.status(200).json(res.locals.item);
+});
+router.patch('/return/:itemId', itemController.returnItem, (req, res) => {
   res.status(200).json(res.locals.item);
 });
 
-router.patch('/close/:email', itemController.deleteItem, (req, res) => {
+router.delete('/delete/:itemId', itemController.deleteItem, (req, res) => {
   res.status(200).json({message: 'Item was deleted'});
 });
 
