@@ -25,6 +25,18 @@ itemController.getItemsByName = (req, res, next) => {
   }).limit(10);
 };
 
+itemController.getItemsById = (req, res, next) => {
+  //TODO: Sanitize params
+  const query = {
+    _id: req.params.itemId
+  }
+  Item.findOne(query, (err, item) => {
+    if (err) return next('Error in itemController.getItemsById: ' + JSON.stringify(err));
+    res.locals.item = item;
+    return next();
+  });
+};
+
 itemController.createItem = (req, res, next) => {
   //TODO: Sanitize params
   const newItem = {
