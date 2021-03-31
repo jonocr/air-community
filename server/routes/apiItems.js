@@ -10,6 +10,10 @@ router.get('/:name', itemController.getItemsByName, (req, res) => {
   res.status(200).json(res.locals.items);
 });
 
+router.get('/detail/:itemId', itemController.getItemsById, (req, res) => {
+  res.status(200).json(res.locals.item);
+}); 
+
 router.post('/create', itemController.createItem, (req, res) => {
   res.status(200).json(res.locals.itemId);
 });
