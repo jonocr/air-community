@@ -13,17 +13,19 @@ itemController.getAllItems = (req, res, next) => {
 itemController.getItemsByName = (req, res, next) => {
   //TODO: Sanitize params
   const query = {
-    name: req.params.name
+    name: { 
+      $regex: '.*' + req.params.name + '.*', 
+      $options: 'i'
+    } 
   }
   Item.find(query, (err, items) => {
     if (err) return next('Error in itemController.getItemsByName: ' + JSON.stringify(err));
     res.locals.items = items;
     return next();
-  });
+  }).limit(10);
 };
 
 itemController.createItem = (req, res, next) => {
-  console.log("itemController.createItem: ", req.body);
   //TODO: Sanitize params
   const newItem = {
     name: req.body.name,
@@ -33,10 +35,8 @@ itemController.createItem = (req, res, next) => {
   }
   Item.create(newItem , (err, item) => {
     if (err) {
-      console.log("itemController Item.create ERR: ", err);
       return next('Error in itemController.createItem: ' + JSON.stringify(err));
     }
-    console.log("itemController Item.create: ", item);
     if (item) {
       res.locals.itemId = Item._id;
       return next();
@@ -50,24 +50,22 @@ itemController.createItem = (req, res, next) => {
 itemController.updateItem = (req, res, next) => {
   //TODO: Sanitize params
   const queryFilter = {
-    email: req.params.email
+    _id: req.params.itemId
   }
   const queryUpdate = {
     name: req.body.name,
     description: req.body.description,
-    ownerId: req.body.ownerId,
     cost: req.body.cost
   }
   Item.updateOne(queryFilter, queryUpdate, (err, item) => {
     if (err) {
-      res.redirect('/signup');
       return next('Error in itemController.updateItem: ' + JSON.stringify(err));
     }
     if (item) {
-      res.locals.item= user;
+      res.locals.item = item;
       return next();
     } else {
-      return res.redirect('/signup');
+      return res.redirect('/items');
     }
   });
 };
@@ -75,44 +73,48 @@ itemController.updateItem = (req, res, next) => {
 itemController.rentItem = (req, res, next) => {
   //TODO: Sanitize params
   const queryFilter = {
-    email: req.params.email
+    _id: req.params.itemId
   }
   const queryUpdate = {
+    renterId: req.body.renterId,
     status: 'rented'
   }
   Item.updateOne(queryFilter, queryUpdate, (err, item) => {
     if (err) {
-      res.redirect('/signup');
-      return next('Error in itemController.deleteItem: ' + JSON.stringify(err));
+      return next('Error in itemController.rentItem: ' + JSON.stringify(err));
     }
-    if (item) {
-      res.locals.item= user;
-      return next();
-    } else {
-      return res.redirect('/signup');
+    res.locals.item= item;
+    return next();
+  });
+};
+
+itemController.returnItem = (req, res, next) => {
+  //TODO: Sanitize params
+  const queryFilter = {
+    _id: req.params.itemId
+  }
+  const queryUpdate = {
+    status: 'available'
+  }
+  Item.updateOne(queryFilter, queryUpdate, (err, item) => {
+    if (err) {
+      return next('Error in itemController.returnItem: ' + JSON.stringify(err));
     }
+    res.locals.item= item;
+    return next();
   });
 };
 
 itemController.deleteItem = (req, res, next) => {
   //TODO: Sanitize params
-  const queryFilter = {
-    email: req.params.email
+  const query = {
+    _id: req.params.itemId
   }
-  const queryUpdate = {
-    status: 'inactive'
-  }
-  Item.updateOne(queryFilter, queryUpdate, (err, item) => {
-    if (err) {
-      res.redirect('/signup');
+  Item.deleteOne(query, (err) => {
+    if (err) {      
       return next('Error in itemController.deleteItem: ' + JSON.stringify(err));
     }
-    if (item) {
-      res.locals.item= user;
-      return next();
-    } else {
-      return res.redirect('/signup');
-    }
+    return next();   
   });
 };
 
