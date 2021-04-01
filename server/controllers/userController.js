@@ -53,22 +53,27 @@ userController.updateUser = (req, res, next) => {
   }
   const queryUpdate = {
     email: req.params.email,
-    password: req.body.password,
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     location: req.body.location
   }
-  User.updateOne(queryFilter, queryUpdate, (err, user) => {
-    if (err) {
-      res.redirect('/signup');
-      return next('Error in userController.updateUser: ' + JSON.stringify(err));
-    }
-    if (user) {
-      res.locals.user= user;
-      return next();
-    } else {
-      return res.redirect('/signup');
-    }
+  User.findOneAndUpdate(
+    queryFilter, 
+    queryUpdate, 
+    {
+      new: true
+    },
+    (err, user) => {
+      if (err) {
+        res.redirect('/signup');
+        return next('Error in userController.updateUser: ' + JSON.stringify(err));
+      }
+      if (user) {
+        res.locals.user= user;
+        return next();
+      } else {
+        return res.redirect('/signup');
+      }
   });
 };
 

@@ -5,8 +5,7 @@ const cookieController = require('../controllers/cookieController');
 
 router.post('/login', userController.verifyUser, cookieController.setSSIDCookie, (req, res) => {
   //TODO: Clean res obj before sending back
-  console.log("User: ", res.locals.user);
-  const user = { id: res.locals.user._id, firstName: res.locals.user.firstName, lastName: res.locals.user.lastName, email: res.locals.user.email, location: res.locals.user.location }
+  const user = { id: res.locals.user._id, firstName: res.locals.user.firstName, lastName: res.locals.user.lastName, email: res.locals.user.email, location: res.locals.user.location };
   res.status(200).json(user);
 
 });
@@ -25,7 +24,8 @@ router.post('/create', userController.createUser, (req, res) => {
 });
 
 router.patch('/:email', userController.updateUser, (req, res) => {
-  res.status(200).json(res.locals.user);
+  const user = { id: res.locals.user._id, firstName: res.locals.user.firstName, lastName: res.locals.user.lastName, email: res.locals.user.email, location: res.locals.user.location };
+  res.status(200).json(user);
 });
 
 router.patch('/close/:email', userController.closeUser, (req, res) => {
