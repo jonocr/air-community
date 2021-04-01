@@ -6,20 +6,12 @@ import LoginPage from './pages/Login.page';
 import UserProfilePage from './pages/Profile.page';
 import SearchItems from './pages/SearchItems.page';
 import DetailItem from './pages/DetailItem.page';
-import Menu from './layout/Menu.layout';
+import CreateItemPage from './pages/CreateItem.page';
+import SignUpPage from './pages/SignUp.page';
 
 function App() {
   const [user, setUser] = useState(null);
   const providerUser = useMemo(() => ({user, setUser}), [user, setUser]);
-  // constructor(props) {
-  //   super(props);
-  //   // this.handleClick = this.handleClick.bind(this);
-  //   // this.state = getInitialState();
-  // }
-  
-
-
- 
 
     return (
       <div>
@@ -34,8 +26,7 @@ function App() {
               </li>
             </ul> */}
             <Route component={LoginPage} exact path="/" />
-            {/* <Route component={LoginPage} exact path="/" /> */}
-            {/* <Route component={UserProfilePage} exact path="/my-profile" /> */}
+            <Route component={SignUpPage} exact path="/signup" />
             <Route path='/my-profile'>
               <UserProfilePage />
             </Route>
@@ -45,10 +36,10 @@ function App() {
             <Route path='/item-detail/:itemId'>
               <DetailItem />
             </Route>
-            {/* <h1>
-              APP.JS
-            </h1>
-            <LoginPage/> */}
+            <Route path='/create-item'>
+              <CreateItemPage />
+            </Route>
+            {/* create-item */}
           </AuthContext.Provider>
         </Router>
       </div>
