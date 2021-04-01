@@ -25,6 +25,18 @@ itemController.getItemsByName = (req, res, next) => {
   }).limit(10);
 };
 
+itemController.getItemsByOwner = (req, res, next) => {
+  //TODO: Sanitize params
+  const query = {
+    ownerId: req.params.userId
+  }
+  Item.find(query, (err, items) => {
+    if (err) return next('Error in itemController.getItemsByName: ' + JSON.stringify(err));
+    res.locals.items = items;
+    return next();
+  }).limit(10);
+};
+
 itemController.getItemsById = (req, res, next) => {
   //TODO: Sanitize params
   const query = {
@@ -69,7 +81,7 @@ itemController.updateItem = (req, res, next) => {
     description: req.body.description,
     cost: req.body.cost
   }
-  Item.updateOne(queryFilter, queryUpdate, (err, item) => {
+  Item.findOneAndUpdate(queryFilter, queryUpdate, { new: true }, (err, item) => {
     if (err) {
       return next('Error in itemController.updateItem: ' + JSON.stringify(err));
     }
