@@ -94,4 +94,30 @@ userController.closeUser = (req, res, next) => {
   });
 };
 
+userController.verifyUser = (req, res, next) => {
+  console.log("verifyUser");
+  //TODO: Sanitize params
+  const queryFilter = {
+    email: req.body.email
+  }
+  User.findOne(queryFilter, (err, user) => {
+    // if a database error occurs, call next with the error message passed in
+    if (err) {
+      return next('Error in userController.verifyUser: ' + JSON.stringify(err));
+    }
+
+    console.log("verifyUser User: ", user);
+    if (user) {
+      user.comparePassword(req.body.password, function (err, isMatch) {
+        if (isMatch) {
+          res.locals.user = user;
+          return next();
+        }
+      });
+    } else {
+      return res.redirect('/login');
+    }
+  });
+};
+
 module.exports = userController;
