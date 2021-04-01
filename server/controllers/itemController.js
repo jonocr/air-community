@@ -50,7 +50,7 @@ itemController.createItem = (req, res, next) => {
       return next('Error in itemController.createItem: ' + JSON.stringify(err));
     }
     if (item) {
-      res.locals.itemId = Item._id;
+      res.locals.item = item;
       return next();
     } else {
       return res.redirect('/create-item');
@@ -91,7 +91,7 @@ itemController.rentItem = (req, res, next) => {
     renterId: req.body.renterId,
     status: 'rented'
   }
-  Item.updateOne(queryFilter, queryUpdate, (err, item) => {
+  Item.findOneAndUpdate(queryFilter, queryUpdate, { new: true }, (err, item) => {
     if (err) {
       return next('Error in itemController.rentItem: ' + JSON.stringify(err));
     }
@@ -106,9 +106,10 @@ itemController.returnItem = (req, res, next) => {
     _id: req.params.itemId
   }
   const queryUpdate = {
+    renterId: '',
     status: 'available'
   }
-  Item.updateOne(queryFilter, queryUpdate, (err, item) => {
+  Item.findOneAndUpdate(queryFilter, queryUpdate, { new: true },(err, item) => {
     if (err) {
       return next('Error in itemController.returnItem: ' + JSON.stringify(err));
     }
