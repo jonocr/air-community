@@ -1,17 +1,28 @@
 import React, { useContext, useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Link, useHistory } from "react-router-dom";
 import { AuthContext } from "../contexts/Auth.context";
+import ItemsList from '../ItemsList';
 import Menu from '../layout/Menu.layout'
 
 const UserProfilePage = (props) => {
   const { user, setUser} = useContext(AuthContext);
   const [profile, setProfile] = useState(null);
+	const [items, setItems] = useState([]);
   const history = useHistory();
 	
 	useEffect(() => {
     if (!user) history.push('/');
     if (user) setProfile(user);
+		getItems();
 	}, []);
+
+	const getItems = () => {
+		fetch(`/items/user/${user.id}`)
+		.then(response => response.json())
+		.then(items => {
+			setItems(items);
+		});
+	}
 
 	const saveHandler = (e) => {
 		e.preventDefault();
@@ -23,10 +34,16 @@ const UserProfilePage = (props) => {
 		})
 		.then(response => response.json())
 		.then(data => {
-			console.log("DATA info: ", data);
 			setUser(data);		
 		})
 	}
+
+	const handleClick = (item) => {
+    history.push({
+      pathname:`/item-detail/${item._id}`,
+      state: { item: item }
+    }
+  )};
 	return (
 		<div className="profile-page">
 		<Menu/>
@@ -94,9 +111,16 @@ const UserProfilePage = (props) => {
 											>
 											</input>
 										</li>
+										{items.length > 0 ? (
+											<li className="list-group-item">
+												<ItemsList data={items} onClick={handleClick}></ItemsList>
+											</li>
+										):(
+											''
+										)}
 										<li className="list-group-item">
 											<a className="btn btn-primary" href="#" role="button" onClick={saveHandler}>Save</a> 
-											<a className="btn btn-light btn-delete" href="#" role="button">Delete</a>
+											{/* <a className="btn btn-light btn-delete" href="#" role="button">Delete</a> */}
 										</li>
 									</ul>
 								</div>
