@@ -5,16 +5,32 @@ import Menu from '../layout/Menu.layout'
 
 const UserProfilePage = (props) => {
   const { user, setUser} = useContext(AuthContext);
+  const [profile, setProfile] = useState(null);
   const history = useHistory();
 	
 	useEffect(() => {
     if (!user) history.push('/');
+    if (user) setProfile(user);
 	}, []);
 
+	const saveHandler = (e) => {
+		e.preventDefault();
+		console.log("Profile User info: ", profile);
+		fetch(`/users/${profile.email}`, {
+			method: "PATCH",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(profile),
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log("DATA info: ", data);
+			setUser(data);		
+		})
+	}
 	return (
 		<div className="profile-page">
 		<Menu/>
-			{user ? (
+			{profile ? (
 				<div>
 					<div className="container">
 						<div className="dashboard-bar dashboard">My Profile</div>
@@ -29,19 +45,57 @@ const UserProfilePage = (props) => {
 										</img>
 									</div>
 									<div className="profile-name-card">
-										<div className="username">{user.firstName}</div>
-										<div className="role"> {user.lastName}</div>
+										<div className="username">{profile.firstName}</div>
+										<div className="role"> {profile.lastName}</div>
 									</div>
 								</div>
 
 								<div>
 									<ul className="list-group list-group-flush">
-										<li className="list-group-item">First Name: {user.firstName}</li>
-										<li className="list-group-item">Last Name: {user.lastName}</li>
-										<li className="list-group-item">Email: {user.email}</li>
-										<li className="list-group-item">Location: {user.location}</li>
+										<li className="list-group-item">First Name: 
+											<input 
+												type="text" 
+												className="form-control" 
+												id="exampleFormControlInput1" 
+												value={profile.firstName} 
+												onChange={(e) => setProfile({ ...profile, firstName: e.target.value })}
+												>
+											</input>
+										</li>
+										<li className="list-group-item">Last Name: 
+											<input 
+											type="text" 
+											className="form-control" 
+											id="exampleFormControlInput2" 
+											value={profile.lastName} 
+											onChange={(e) => setProfile({ ...profile, lastName: e.target.value })}
+											></input>
+										</li>
 										<li className="list-group-item">
-											<a className="btn btn-primary" href="#" role="button">Save</a> 
+											Email: 
+											<input 
+												type="email" 
+												className="form-control" 
+												readOnly 
+												disabled="disabled" 
+												id="exampleFormControlInput3" 
+												placeholder="name@example.com" 
+												value={profile.email} 
+											>
+											</input>
+										</li>
+										<li className="list-group-item">Location: 	
+											<input 
+												type="text" 
+												className="form-control"  
+												id="exampleFormControlInput4" 
+												value={profile.location} 
+												onChange={(e) => setProfile({ ...profile, location: e.target.value })}
+											>
+											</input>
+										</li>
+										<li className="list-group-item">
+											<a className="btn btn-primary" href="#" role="button" onClick={saveHandler}>Save</a> 
 											<a className="btn btn-light btn-delete" href="#" role="button">Delete</a>
 										</li>
 									</ul>
