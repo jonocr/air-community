@@ -1,16 +1,32 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
+import { AuthContext } from '../contexts/Auth.context';
 
 const LoginPage = () => {
+  const history = useHistory();
+	const { user, setUser } = useContext(AuthContext);
+	const [login, setLogin] = useState({ email: "", password: "" });
+	const loginhandler = (e) => {
+		e.preventDefault();
+		fetch('/users/login', {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(login),
+		})
+		.then(response => response.json())
+		.then(data => {
+			setUser(data);
+			// 	//TODO: token: data.token, 
+			// console.log("RES value React: ", data);
+			history.push({
+				pathname:`/search-items/`
+			});			
+		})
+	}
   return (
 		<div className="login-body">
 			<div className="login-container">
-				<div role="alert">
-					Incorrect email or password.
-					<button type="button" className="close">
-						<span>&times;</span>
-					</button>
-				</div>
-				<form >
+				<form onSubmit={loginhandler}>
 					<div className="form-group">
 						<label htmlFor="emailInput">Email address</label>
 						<input
@@ -19,7 +35,7 @@ const LoginPage = () => {
 							id="email"
 							name="email"
 							placeholder="name@example.com"
-							// onChange={(e) => setUser({ ...user, email: e.target.value })}
+							onChange={(e) => setLogin({ ...login, email: e.target.value })}
 						/>
 					</div>
 
@@ -31,7 +47,7 @@ const LoginPage = () => {
 							id="password"
 							name="password"
 							placeholder="Password"
-							// onChange={(e) => setUser({ ...user, password: e.target.value })}
+							onChange={(e) => setLogin({ ...login, password: e.target.value })}
 						/>
 					</div>
 
