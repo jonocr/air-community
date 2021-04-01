@@ -100,7 +100,6 @@ userController.closeUser = (req, res, next) => {
 };
 
 userController.verifyUser = (req, res, next) => {
-  console.log("verifyUser");
   //TODO: Sanitize params
   const queryFilter = {
     email: req.body.email
@@ -110,8 +109,6 @@ userController.verifyUser = (req, res, next) => {
     if (err) {
       return next('Error in userController.verifyUser: ' + JSON.stringify(err));
     }
-
-    console.log("verifyUser User: ", user);
     if (user) {
       user.comparePassword(req.body.password, function (err, isMatch) {
         if (isMatch) {
