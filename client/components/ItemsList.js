@@ -3,7 +3,6 @@ import React from "react";
 const ItemsList = (props) => {
 	return (
 		<div>
-			<h3>ItemsList</h3>
 			<table className="table table-hover">
 				<thead>
 					<tr>
