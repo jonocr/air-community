@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const itemController = require('../controllers/itemController');
+const itemController = require('../controllers/itemController'); 
 
 router.get('/', itemController.getAllItems, (req, res) => {
   res.status(200).json(res.locals.items);
@@ -15,7 +15,7 @@ router.get('/detail/:itemId', itemController.getItemsById, (req, res) => {
 }); 
 
 router.post('/create', itemController.createItem, (req, res) => {
-  res.status(200).json(res.locals.itemId);
+  res.status(200).json(res.locals.item);
 });
 
 router.patch('/:itemId', itemController.updateItem, (req, res) => {
