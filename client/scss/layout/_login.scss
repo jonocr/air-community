@@ -1,0 +1,58 @@
+.login-body {
+	background-color: $super-dark-grey;
+	height: 100vh;
+	position: relative;
+	font-size: 16px;
+}
+.login-container {
+	position: relative;
+	background-color: $white;
+	width: 90%;
+	top: 50px;
+	margin-right: auto;
+	margin-left: auto;
+	padding-bottom: 10px;
+	border-radius: 2px;
+	color: $login-text-color;
+	text-transform: uppercase;
+
+	@include media-breakpoint-up(md) {
+		width: 400px;
+	}
+
+	form {
+		padding-top: 20px;
+	}
+
+	.form-group {
+		width: 90%;
+		text-align: center;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	label {
+		display: inline-block;
+		margin-bottom: 0.5rem;
+	}
+
+	button {
+		width: 100%;
+	}
+}
+
+.no-account {
+	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	padding-top: 20px;
+	border-top: 1px solid;
+	border-color: $login-text-color;
+	font-size: smaller;
+}
+
+.new-user-container {
+	button {
+		width: 100%;
+	}
+}
