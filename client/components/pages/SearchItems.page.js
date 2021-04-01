@@ -8,16 +8,10 @@ const ItemSearchPage = (props) => {
 	const abortController = new AbortController();
   const { user, setUser} = useContext(AuthContext);
 	const [items, setItems] = useState([]);
+	const [query, setQuery] = useState('');
   const history = useHistory();
-  const handleClick = (item) => {
-    history.push({
-      pathname:`/item-detail/${item._id}`,
-      state: { item: item }
-    }
-  )};
 
-
-	useEffect(() => {
+  useEffect(() => {
     if (!user) {
       history.push('/');
       } else {
@@ -25,7 +19,6 @@ const ItemSearchPage = (props) => {
         .then(response => response.json())
         .then(items => {
           setItems(items);
-          // setLoaded(true);
         });
     }
 
@@ -34,18 +27,48 @@ const ItemSearchPage = (props) => {
 		};
 	}, []);
 
+  const handleClick = (item) => {
+    history.push({
+      pathname:`/item-detail/${item._id}`,
+      state: { item: item }
+    }
+  )};
+
+  const searchHandler = () => {
+    fetch(`/items/${query}`)
+      .then(response => response.json())
+      .then(items => {
+        setItems(items);
+      });
+  };
+
 	return (
 		<div>	
 		<Menu/>
-      {/* <SideMenu css={closeCss}></SideMenu>
-			<TopBar onClick={clickToggle} css={closeCss}></TopBar> */}
       { user ? (
-      <div>
-        <h2>Search Items</h2>
-      
+      <div>      
         <div className="container">
           <div className="dashboard-bar dashboard">Item Search</div>
+          <div className="row search-item">
+            <div className="col-3">
+              <input 
+                type="text" 
+                className="form-control" 
+                id="exampleFormControlInput3" 
+                value={query} 
+                onChange={(e) => setQuery(e.target.value)}
+                >
+              </input>
+            </div>
+              <a className="btn btn-primary" href="#" role="button" onClick={searchHandler}>Search</a> 
+            <div className="col-3">
+            </div>
+            <div className="col-2">
+            </div>
 
+            <div className="col-4">
+            </div>
+          </div>
           <div className="dashboard-main dashboard">
           <ItemsList data={items} onClick={handleClick}></ItemsList>
           
