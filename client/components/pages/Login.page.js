@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { AuthContext } from '../contexts/Auth.context';
 
 const LoginPage = () => {
@@ -58,7 +58,7 @@ const LoginPage = () => {
 					</div>
 				</form>
 				<div className="no-account">
-					{/* Don't have account ? <Link to="/new-account">Sign Up Here</Link> */}
+					Don't have account ? <Link to="/signup">Sign Up Here</Link>
 				</div>
 			</div>
 		</div>
